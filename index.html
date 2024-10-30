@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+        }
+
+        input[type="text"] {
+            margin: 10px 0;
+            width: 50%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            margin-top: 10px;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            
+        }
+        button:focus{
+            outline: none;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        img {
+            margin: 15px 0;
+            width: 100px;
+            height: auto;
+        }
+        .container h1 ,h2{
+            font-size: 4vw;
+            color: #218838;
+        }
+        .container p{
+            font-size: 2vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <input type="text" placeholder="Enter your city" id="city" class="form-control">
+        <button onclick="whether()"><i class="fa-solid fa-magnifying-glass"></i> Check Weather</button><br>
+        <img src="" alt="" id="weatherIcon">
+        <h2 id="result"></h2>
+        <p id="pararesult"></p>
+    </div>
+
+    <script>
+        function whether() {
+            let city = document.querySelector("#city").value;
+            const apiKey = 'd347dfb1a00b4f86add45435242510';
+            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.querySelector("#weatherIcon").src = `https:${data.current.condition.icon}`;
+                    document.querySelector("#result").innerText = `${data.current.temp_c} °C - ${data.current.condition.text}`;
+                    document.querySelector("#pararesult").innerHTML = `Location:  ${data.location.name},  ${data.location.region},  ${data.location.country}<br> Wind Chill:  ${data.current.windchill_f}°F <br> Feels Like:  ${data.current.feelslike_c}°C <br> Humidity: ${data.current.humidity}% <br> Visibility: ${data.current.vis_km} km <br> Wind Speed:  ${data.current.wind_kph} kph`;
+                })
+                .catch(err => {
+                    console.log(err);
+                    alert('City not found. Please try again.');
+                });
+        }
+    </script>
+
+   
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
